@@ -1,0 +1,45 @@
+
+We think our solution is much closer to perfection because it has a higher range of speed values it takes in before the trains finally can't cope. We're talking about speeds of upto 22 units. 
+
+We have used a total of 6 semaphores, two of which represent both end stations, where the train changes direction and have set their permits to 0. Meaning that no train can go through an end station. The other semaphores represent those points on the rails that are potentially shared pass-through for both trains at a given time. We denoted these points with a prefix - "Common". 
+
+Our rails were theoretically divided into small portions in order to place the sensors and semaphores for maximum efficiency. We have a middle, upper and a lower rail.
+
+When it comes to the code, we have a handfull of methods that do the extra work needed to produce results. 
+
+Explanation on what each method does
+************************************
+*The constructor() - sets the initial speed of the train, its identification number and which direction its coming from. We needed this variable as it proved to be quite vital in the whole process. 
+
+*endStation() - It changes the direction variable for a specific train, reverses the speeds, stops the train, makes it wait for some 1-2 seconds and then sets it back on its course again. 
+
+*waitUntilSemaphoreReleased() - It makes the train to wait for a while prior to an in-availability of any free semaphore. 
+
+*alterSwitchPos() - This function basically changes the switch direction depending on where the train is coming from and further more in its overload, it aids in increasing the number of permits for a given semaphore. 
+
+*waitUntilReswitched() - This function holds the train stationary if a semaphore returns false and until when otherwise, it propells the train forward with its stated speed. 
+
+*run() - Its an implementation of the Runnable interface and its where most of our logic lies. It has a for loop to aid in endless re-assessment of the whole package. We basically check the status of a given sensor and set the semaphores plus their corresponding switches to the right position as the trains advance in their destinations. 
+
+
+1.Placement of sensors
+**********************
+One of the most important things we did when placing out sensors is placing two pretty close sensors to our critical points. The closest sensor to that point always tells us which of the trains is closest and therefore given high priority to go through the point. The second closest sensordoes pretty much the samething except that it gives us information on when the train should start to break incase its not given priority to go through a given critical point. 
+
+
+2.Choice of critical sections
+*****************************
+In our solution, we have chosen critical sections as those that both train must pass-through to continue to their destinations. We analysed and identified a total of 5 sections that were quite instrumental when building the logic of setting priorities. 
+
+
+3.Maximum train speed and the reason for it
+********************************************
+We tested our solution with varying figures of speed and we came to a conclusion that any speed between 15, which was the minimum and 30 works well. Speeds of over 22 didn't work because the train experienced longer stopping distances. This meant that when a train is close to a critical point and it attempts to break, it takes some extra nanoseconds until it comes to a complete stopp. This effect is exponential to the trains speed. 
+The same effect was experienced when the trains came to the end stations. They couldn't break just in time not to derail. 
+
+
+4.How we tested our solution
+*****************************
+We tested our solution by giving our trains varying speeds to see how they are going to peform and whether the switches worked exactly how they did. 
+We wanted to write some JUnit tests but it was a bit hard. We had to wait quite sometime until a train reaches a selected sensor to see the effects on a given switch/semaphore. 
+We also used some System.out.Println() statements to spit out values being held by some variables. This meant that we slowed down the Train speeds to a record 1-speed, almost slow-motion speed to see the effect they caused on different parts of the whole rail system.
